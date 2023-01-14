@@ -30,7 +30,6 @@ class UserCreateSerializer(BaseUserCreateSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    # user_id = serializers.IntegerField(read_only=True)
     user_id = serializers.IntegerField(read_only=True)
 
     class Meta:
