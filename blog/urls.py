@@ -1,9 +1,13 @@
-from rest_framework.routers import SimpleRouter
-from .views import PostViewSet
+# from rest_framework.routers import SimpleRouter
+from rest_framework_nested import routers
+from .views import PostViewSet, CommentViewSet
 
 
-router = SimpleRouter()
+router = routers.SimpleRouter()
 
 router.register('posts', PostViewSet, basename='post')
 
-urlpatterns = router.urls
+posts_router = routers.NestedSimpleRouter(router, 'posts', lookup='post')
+posts_router.register('comments', CommentViewSet, basename='post-comments')
+
+urlpatterns = router.urls + posts_router.urls
