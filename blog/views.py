@@ -1,4 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
+from django_filters.rest_framework.backends import DjangoFilterBackend
 from .permissions import IsAuthorOrReadOnly
 from .models import Post, Comment
 from .serializers import PostSerializer, UpdatePostSerializer, CommentSerializer, UpdateCommentSerializer
@@ -8,6 +9,8 @@ from .serializers import PostSerializer, UpdatePostSerializer, CommentSerializer
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     permission_classes = [IsAuthorOrReadOnly]
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['user']
 
     def get_serializer_class(self):
         if self.request.method == 'PUT':
