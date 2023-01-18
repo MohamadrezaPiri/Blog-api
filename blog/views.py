@@ -1,5 +1,6 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework.backends import DjangoFilterBackend
 from .permissions import IsAuthorOrReadOnly
 from .models import Post, Comment
@@ -10,6 +11,7 @@ from .serializers import PostSerializer, UpdatePostSerializer, CommentSerializer
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     permission_classes = [IsAuthorOrReadOnly]
+    pagination_class = PageNumberPagination
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['user']
     search_fields = ['title', 'content']
