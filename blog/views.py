@@ -1,5 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.filters import SearchFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework.backends import DjangoFilterBackend
 from .permissions import IsAuthorOrReadOnly
 from .models import Post, Comment
@@ -10,9 +10,10 @@ from .serializers import PostSerializer, UpdatePostSerializer, CommentSerializer
 class PostViewSet(ModelViewSet):
     queryset = Post.objects.all()
     permission_classes = [IsAuthorOrReadOnly]
-    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['user']
     search_fields = ['title', 'content']
+    ordering_fields = ['created_at']
 
     def get_serializer_class(self):
         if self.request.method == 'PUT':

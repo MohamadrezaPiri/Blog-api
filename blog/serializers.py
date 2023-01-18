@@ -6,7 +6,8 @@ from .models import Post, Comment
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ['id', 'user_id', 'title', 'content']
+        fields = ['id', 'user_id', 'title',
+                  'content', 'created_at', 'updated_at']
 
     user_id = serializers.IntegerField(read_only=True)
 
