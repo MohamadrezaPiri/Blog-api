@@ -1,13 +1,25 @@
 from rest_framework import serializers
 from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer
-from .models import Post, Comment
+from .models import Post, Comment, PostImage
+
+
+class PostImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PostImage
+        fields = ['id', 'image']
+
+    def create(self, validated_data):
+        post_id = self.context['post_id']
+        return PostImage.objects.create(post_id=post_id, **validated_data)
 
 
 class PostSerializer(serializers.ModelSerializer):
+    images = PostImageSerializer(read_only=True, many=True)
+
     class Meta:
         model = Post
         fields = ['id', 'user_id', 'title',
-                  'content', 'created_at', 'updated_at']
+                  'content', 'images', 'created_at', 'updated_at']
 
     user_id = serializers.IntegerField(read_only=True)
 

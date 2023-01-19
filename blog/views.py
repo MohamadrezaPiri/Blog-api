@@ -3,13 +3,13 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework.backends import DjangoFilterBackend
 from .permissions import IsAuthorOrReadOnly
-from .models import Post, Comment
-from .serializers import PostSerializer, UpdatePostSerializer, CommentSerializer, UpdateCommentSerializer
+from .models import Post, Comment, PostImage
+from .serializers import PostSerializer, UpdatePostSerializer, CommentSerializer, UpdateCommentSerializer, PostImageSerializer
 # Create your views here.
 
 
 class PostViewSet(ModelViewSet):
-    queryset = Post.objects.all()
+    queryset = Post.objects.prefetch_related('images').all()
     permission_classes = [IsAuthorOrReadOnly]
     pagination_class = PageNumberPagination
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -41,3 +41,14 @@ class CommentViewSet(ModelViewSet):
 
     def get_serializer_context(self):
         return {'user_id': self.request.user.id, 'post_id': self.kwargs['post_pk']}
+
+
+class PostImageViewSet(ModelViewSet):
+
+    serializer_class = PostImageSerializer
+
+    def get_queryset(self):
+        return PostImage.objects.filter(post_id=self.kwargs['post_pk'])
+
+    def get_serializer_context(self):
+        return {'post_id': self.kwargs['post_pk']}
