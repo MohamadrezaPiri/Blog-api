@@ -182,3 +182,11 @@ class TestRetrievePost:
         response = retrieve_post('1')
 
         assert response.status_code == status.HTTP_404_NOT_FOUND
+
+
+@pytest.mark.django_db
+class TestGetPostsList:
+    def test_if_returns_200(self, api_client):
+        response = api_client.get('/posts/')
+
+        assert response.status_code == status.HTTP_200_OK
