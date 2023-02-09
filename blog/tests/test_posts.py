@@ -27,6 +27,13 @@ def delete_post(api_client):
     return do_delete_post
 
 
+@pytest.fixture
+def retrieve_post(api_client):
+    def do_retrieve_post(post_id):
+        return api_client.get(f'/posts/{post_id}/')
+    return do_retrieve_post
+
+
 # TESTS
 @pytest.mark.django_db
 class TestCreatePost:
@@ -160,3 +167,18 @@ class TestDeletePost:
         response = delete_post(post.id)
 
         assert response.status_code == status.HTTP_204_NO_CONTENT
+
+
+@pytest.mark.django_db
+class TestRetrievePost:
+    def test_if_post_exists_returns_200(self, retrieve_post):
+        post = baker.make(Post)
+
+        response = retrieve_post(post.id)
+
+        assert response.status_code == status.HTTP_200_OK
+
+    def test_if_post_does_not_exist_returns_404(self, retrieve_post):
+        response = retrieve_post('1')
+
+        assert response.status_code == status.HTTP_404_NOT_FOUND
