@@ -19,9 +19,15 @@ def update_post(api_client):
         return api_client.put(f'/posts/{post_id}/', post)
     return do_update_post
 
+
+@pytest.fixture
+def delete_post(api_client):
+    def do_delete_post(post_id):
+        return api_client.delete(f'/posts/{post_id}/')
+    return do_delete_post
+
+
 # TESTS
-
-
 @pytest.mark.django_db
 class TestCreatePost:
     def test_if_user_is_anonymus_returns_401(self, create_post):
@@ -115,3 +121,42 @@ class TestUpdatePost:
             post.id, {'title': post.title, 'content': post.content})
 
         assert response.status_code == status.HTTP_200_OK
+
+
+@pytest.mark.django_db
+class TestDeletePost:
+    def test_if_user_is_anonymous_returns_401(self, delete_post):
+        post = baker.make(Post)
+
+        response = delete_post(post.id)
+
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_if_user_is_not_author_returns_403(self, authenticate, delete_post):
+        author = baker.make(User)
+        user = baker.make(User)
+        post = baker.make(Post, user=author)
+
+        authenticate(user=user)
+        response = delete_post(post.id)
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_if_user_is_author_returns_204(self, authenticate, delete_post):
+        author = baker.make(User)
+        post = baker.make(Post, user=author)
+
+        authenticate(user=author)
+        response = delete_post(post.id)
+
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+
+    def test_if_user_is_admin_returns_204(self, authenticate, delete_post):
+        author = baker.make(User)
+        admin = baker.make(User, is_staff=True)
+        post = baker.make(Post, user=author)
+
+        authenticate(user=admin)
+        response = delete_post(post.id)
+
+        assert response.status_code == status.HTTP_204_NO_CONTENT
