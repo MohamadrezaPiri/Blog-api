@@ -13,7 +13,15 @@ def create_post(api_client):
     return do_create_post
 
 
+@pytest.fixture
+def update_post(api_client):
+    def do_update_post(post_id, post):
+        return api_client.put(f'/posts/{post_id}/', post)
+    return do_update_post
+
 # TESTS
+
+
 @pytest.mark.django_db
 class TestCreatePost:
     def test_if_user_is_anonymus_returns_401(self, create_post):
@@ -44,3 +52,66 @@ class TestCreatePost:
         response = create_post({'title': 'a', 'content': 'aa'})
 
         assert response.status_code == status.HTTP_201_CREATED
+
+
+@pytest.mark.django_db
+class TestUpdatePost:
+    def test_if_title_is_invalid_returns_400(self, authenticate, update_post):
+        user = baker.make(User)
+        post = baker.make(Post, user=user)
+
+        authenticate(user=user)
+        response = update_post(
+            post.id, {'title': '', 'content': post.content})
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_if_content_is_invalid_returns_400(self, authenticate, update_post):
+        user = baker.make(User)
+        post = baker.make(Post, user=user)
+
+        authenticate(user=user)
+        response = update_post(
+            post.id, {'title': post.title, 'content': ''})
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    def test_if_user_is_anonymus_returns_401(self, update_post):
+        post = baker.make(Post)
+
+        response = update_post(
+            post.id, {'title': post.title, 'content': post.content})
+
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_if_user_is_not_author_returns_403(self, authenticate, update_post):
+        author = baker.make(User)
+        user = baker.make(User)
+        post = baker.make(Post, user=author)
+
+        authenticate(user=user)
+        response = update_post(
+            post.id, {'title': post.title, 'content': post.content})
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_if_user_is_author_returns_200(self, authenticate, update_post):
+        author = baker.make(User)
+        post = baker.make(Post, user=author)
+
+        authenticate(user=author)
+        response = update_post(
+            post.id, {'title': post.title, 'content': post.content})
+
+        assert response.status_code == status.HTTP_200_OK
+
+    def test_if_user_is_admin_returns_200(self, authenticate, update_post):
+        author = baker.make(User)
+        admin = baker.make(User, is_staff=True)
+        post = baker.make(Post, user=author)
+
+        authenticate(user=admin)
+        response = update_post(
+            post.id, {'title': post.title, 'content': post.content})
+
+        assert response.status_code == status.HTTP_200_OK
