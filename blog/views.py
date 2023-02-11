@@ -1,4 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.exceptions import NotFound
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework.backends import DjangoFilterBackend
@@ -31,7 +32,11 @@ class CommentViewSet(ModelViewSet):
     permission_classes = [IsAuthorOrReadOnly]
 
     def get_queryset(self):
-        return Comment.objects.filter(post_id=self.kwargs['post_pk'])
+        comment = Comment.objects.filter(post_id=self.kwargs['post_pk'])
+        if comment.exists():
+            return comment
+        else:
+            raise NotFound('There is no post with the given ID')
 
     def get_serializer_class(self):
         if self.request.method == 'PUT':
