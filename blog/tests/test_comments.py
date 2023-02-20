@@ -159,3 +159,20 @@ class TestGetCommentsList:
         response = api_client.get('/posts/1/comments/')
 
         assert response.status_code == status.HTTP_404_NOT_FOUND
+
+
+@pytest.mark.django_db
+class TestRetrievComment:
+    def test_if_comment_exists_returns_200(self, api_client):
+        comment = baker.make(Comment)
+
+        response = api_client.get(
+            f'/posts/{comment.post.id}/comments/{comment.id}/')
+
+        assert response.status_code == status.HTTP_200_OK
+
+    def test_if_comment_does_not_exist_returns_404(self, api_client):
+        response = api_client.get(
+            f'/posts/1/comments/1/')
+
+        assert response.status_code == status.HTTP_404_NOT_FOUND
