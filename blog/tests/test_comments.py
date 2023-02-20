@@ -20,6 +20,13 @@ def Update_comment(api_client):
     return do_update_coment
 
 
+@pytest.fixture
+def delete_comment(api_client):
+    def do_delete_coment(post_id, comment_id):
+        return api_client.delete(f'/posts/{post_id}/comments/{comment_id}/')
+    return do_delete_coment
+
+
 # TESTS
 @pytest.mark.django_db
 class TestCreateComment:
@@ -100,3 +107,40 @@ class TestUpdateComment:
         response = Update_comment(post.id, comment.id, {'description': 'aaa'})
 
         assert response.status_code == status.HTTP_200_OK
+
+
+@pytest.mark.django_db
+class TestDeleteComment:
+    def test_if_user_is_anonymous_returns_401(self, delete_comment):
+        response = delete_comment(1, 1)
+
+        assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+    def test_if_user_is_not_author_returns_403(self, delete_comment, authenticate):
+        author = baker.make(User, username='Author')
+        user = baker.make(User)
+        comment = baker.make(Comment, user=author)
+
+        authenticate(user=user)
+        response = delete_comment(comment.post.id, comment.id)
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN
+
+    def test_if_user_is_author_returns_204(self, delete_comment, authenticate):
+        author = baker.make(User, username='Author')
+        comment = baker.make(Comment, user=author)
+
+        authenticate(user=author)
+        response = delete_comment(comment.post.id, comment.id)
+
+        assert response.status_code == status.HTTP_204_NO_CONTENT
+
+    def test_if_user_is_admin_returns_204(self, delete_comment, authenticate):
+        author = baker.make(User, username='Author')
+        admin = baker.make(User, is_staff=True)
+        comment = baker.make(Comment, user=author)
+
+        authenticate(user=admin)
+        response = delete_comment(comment.post.id, comment.id)
+
+        assert response.status_code == status.HTTP_204_NO_CONTENT
