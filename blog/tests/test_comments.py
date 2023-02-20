@@ -144,3 +144,18 @@ class TestDeleteComment:
         response = delete_comment(comment.post.id, comment.id)
 
         assert response.status_code == status.HTTP_204_NO_CONTENT
+
+
+@pytest.mark.django_db
+class TestGetCommentsList:
+    def test_if_returns_200(self, api_client):
+        comment = baker.make(Comment)
+
+        response = api_client.get(f'/posts/{comment.post.id}/comments/')
+
+        assert response.status_code == status.HTTP_200_OK
+
+    def test_if_post_or_comment_does_not_exist_returns_404(self, api_client):
+        response = api_client.get('/posts/1/comments/')
+
+        assert response.status_code == status.HTTP_404_NOT_FOUND

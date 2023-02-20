@@ -36,7 +36,7 @@ class CommentViewSet(ModelViewSet):
         if comment.exists():
             return comment
         else:
-            raise NotFound('There is no post with the given ID')
+            raise NotFound('There is no post or comment with the given ID')
 
     def get_serializer_class(self):
         if self.request.method == 'PUT':
