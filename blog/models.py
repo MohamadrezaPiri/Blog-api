@@ -32,3 +32,9 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     description = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
+
+
+    @property
+    def content(self):
+        return truncatechars(self.description, 10)
+    
