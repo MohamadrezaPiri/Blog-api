@@ -15,6 +15,9 @@ class Post(models.Model):
     @property
     def post_content(self):
         return truncatechars(self.content, 10)
+    
+    def __str__(self) -> str:
+        return self.title
 
 
 class PostImage(models.Model):
