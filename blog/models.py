@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.template.defaultfilters import truncatechars
 from .validators import validate_image_size
 # Create your models here.
 
@@ -10,6 +11,10 @@ class Post(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def post_content(self):
+        return truncatechars(self.content, 10)
 
 
 class PostImage(models.Model):
