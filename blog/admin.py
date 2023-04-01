@@ -5,14 +5,10 @@ from .models import Post,PostImage
 
 
 
-
 class PostImageInline(admin.TabularInline):
     model=PostImage
     fields=['image']
     
-
-
-
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
@@ -20,5 +16,6 @@ class PostAdmin(admin.ModelAdmin):
     autocomplete_fields = ['user']
     search_fields = ['title']
     list_per_page=10
+    inlines=[PostImageInline]
 
 
