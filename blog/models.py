@@ -36,5 +36,5 @@ class Comment(models.Model):
 
     @property
     def content(self):
-        return truncatechars(self.description, 10)
+        return truncatechars(self.description, 20)
     
