@@ -24,3 +24,4 @@ class CommentAdmin(admin.ModelAdmin):
     list_display=['user','post','content','date']
     autocomplete_fields=['user','post']
     search_fields=['user','content']
+    list_per_page=10
