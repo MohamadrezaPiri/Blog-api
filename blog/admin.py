@@ -30,6 +30,12 @@ class PostAdmin(admin.ModelAdmin):
             }))
         return format_html('<a href="{}">{} posts</a>', url, post.comments_count)
     
+    def get_queryset(self, request):
+        return super().get_queryset(request).annotate(
+            comments_count=Count('comment')
+        )
+    
+    
 
     
     
