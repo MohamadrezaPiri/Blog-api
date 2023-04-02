@@ -15,7 +15,7 @@ class PostImageInline(admin.TabularInline):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ['title', 'user', 'created_at','post_content']
+    list_display = ['title', 'user', 'created_at','post_content','comments_count']
     autocomplete_fields = ['user']
     search_fields = ['title']
     list_per_page=10
