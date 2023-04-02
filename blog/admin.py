@@ -1,4 +1,7 @@
 from django.contrib import admin
+from django.urls import reverse
+from django.utils.html import urlencode, format_html
+from django.db.models.aggregates import Count
 from .models import Post,PostImage,Comment
 
 # Register your models here.
@@ -18,6 +21,20 @@ class PostAdmin(admin.ModelAdmin):
     list_per_page=10
     inlines=[PostImageInline]
 
+    def comments_count(self, post):
+        url = (
+            reverse('admin:blog_post_changelist')
+            + '?'
+            + urlencode({
+                'post__id': str(post.id)
+            }))
+        return format_html('<a href="{}">{} posts</a>', url, post.comments_count)
+    
+
+    
+    
+
+
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
@@ -25,3 +42,4 @@ class CommentAdmin(admin.ModelAdmin):
     autocomplete_fields=['user','post']
     search_fields=['user','content']
     list_per_page=10
+
