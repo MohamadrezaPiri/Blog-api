@@ -70,4 +70,8 @@ class UserAdmin(admin.ModelAdmin):
             }))
         return format_html('<a href="{}">{} posts</a>', url, user.posts_count)
     
+    def get_queryset(self, request):
+        return super().get_queryset(request).annotate(
+            posts_count=Count('post')
+        )
     
