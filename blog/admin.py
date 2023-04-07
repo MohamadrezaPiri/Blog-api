@@ -60,3 +60,14 @@ class UserAdmin(admin.ModelAdmin):
     list_display=['username','first_name','last_name','email','is_staff']
     list_editable=['is_staff']
     list_per_page=10
+
+    def posts_count(self, user):
+        url = (
+            reverse('admin:blog_post_changelist')
+            + '?'
+            + urlencode({
+                'user__id': str(user.id)
+            }))
+        return format_html('<a href="{}">{} posts</a>', url, user.posts_count)
+    
+    
