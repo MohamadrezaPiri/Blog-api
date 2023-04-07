@@ -56,3 +56,4 @@ user=get_user_model()
 @admin.register(user)
 class UserAdmin(admin.ModelAdmin):
     search_fields=['username']
+    fields=['username','first_name','last_name','email','password','is_staff','is_active']
