@@ -55,4 +55,4 @@ user=get_user_model()
 
 @admin.register(user)
 class UserAdmin(admin.ModelAdmin):
-    pass
+    search_fields=['username']
