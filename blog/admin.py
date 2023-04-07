@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.urls import reverse
 from django.utils.html import urlencode, format_html
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django.db.models.aggregates import Count
 from .models import Post,PostImage,Comment
 
@@ -35,12 +37,6 @@ class PostAdmin(admin.ModelAdmin):
             comments_count=Count('comment')
         )
     
-    
-
-    
-    
-
-
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
@@ -49,3 +45,14 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields=['user','content']
     list_per_page=10
 
+
+
+
+admin.site.unregister(User)
+user=get_user_model()
+
+
+
+@admin.register(user)
+class UserAdmin(admin.ModelAdmin):
+    pass
