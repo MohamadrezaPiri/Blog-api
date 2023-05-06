@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db.models.aggregates import Count
 from .models import Post,PostImage,Comment
+from .filters import CommentsCountFilter
 
 # Register your models here.
 
@@ -18,7 +19,7 @@ class PostImageInline(admin.TabularInline):
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ['title', 'user', 'created_at','post_content','comments_count']
-    list_filter = ['user__username']
+    list_filter = ['user__username',CommentsCountFilter]
     list_per_page=10
     autocomplete_fields = ['user']
     search_fields = ['title']
