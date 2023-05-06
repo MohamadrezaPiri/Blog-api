@@ -18,9 +18,10 @@ class PostImageInline(admin.TabularInline):
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
     list_display = ['title', 'user', 'created_at','post_content','comments_count']
+    list_filter = ['user__username']
+    list_per_page=10
     autocomplete_fields = ['user']
     search_fields = ['title']
-    list_per_page=10
     inlines=[PostImageInline]
 
     def comments_count(self, post):
