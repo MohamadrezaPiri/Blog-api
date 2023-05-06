@@ -1,4 +1,4 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.urls import reverse
 from django.utils.html import urlencode, format_html
 from django.contrib.auth import get_user_model
@@ -38,6 +38,19 @@ class PostAdmin(admin.ModelAdmin):
         return super().get_queryset(request).annotate(
             comments_count=Count('comment')
         )
+    
+    @admin.action(description='Clear Comments')
+    def clear_comments(self, request, queryset):
+        total_comments_count = sum(blog.comment_set.count() for blog in queryset)
+
+        for blog in queryset:
+            blog.comment_set.all().delete()
+
+        self.message_user(
+            request,
+            f'{total_comments_count} comments removed',
+            messages.SUCCESS
+        )    
     
 
 @admin.register(Comment)
