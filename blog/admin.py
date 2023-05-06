@@ -24,6 +24,7 @@ class PostAdmin(admin.ModelAdmin):
     autocomplete_fields = ['user']
     search_fields = ['title']
     inlines=[PostImageInline]
+    actions = ['clear_comments']
 
     def comments_count(self, post):
         url = (
