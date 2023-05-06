@@ -2,8 +2,8 @@ from django.contrib import admin
 from django.db.models import Count
 
 class CommentsCountFilter(admin.SimpleListFilter):
-    title = 'Comments'
-    parameter_name = 'comments_count'
+    title = 'comments count'
+    parameter_name = 'comment'
 
     def lookups(self, request, model_admin):
         return [
