@@ -26,6 +26,7 @@ class PostAdmin(admin.ModelAdmin):
     inlines=[PostImageInline]
     actions = ['clear_comments']
 
+    @admin.display(ordering='comments_count')
     def comments_count(self, post):
         url = (
             reverse('admin:blog_post_changelist')
