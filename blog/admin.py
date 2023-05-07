@@ -75,7 +75,7 @@ user=get_user_model()
 @admin.register(user)
 class UserAdmin(admin.ModelAdmin):
     search_fields=['username']
-    fields=['username','first_name','last_name','email','password','is_staff','is_active']
+    fields=['username','first_name','last_name','email','is_staff']
     list_display=['username','first_name','last_name','email','is_staff','posts_count']
     list_editable=['is_staff']
     list_per_page=10
