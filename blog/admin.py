@@ -76,21 +76,21 @@ user=get_user_model()
 class UserAdmin(admin.ModelAdmin):
     search_fields=['username']
     fields=['username','first_name','last_name','email','password','is_staff','is_active']
-    list_display=['username','first_name','last_name','email','is_staff','posts_count']
+    list_display=['username','first_name','last_name','email','is_staff','posts']
     list_editable=['is_staff']
     list_per_page=10
 
-    def posts_count(self, user):
+    def posts(self, user):
         url = (
             reverse('admin:blog_post_changelist')
             + '?'
             + urlencode({
                 'user__id': str(user.id)
             }))
-        return format_html('<a href="{}">{} posts</a>', url, user.posts_count)
+        return format_html('<a href="{}">{} posts</a>', url, user.posts)
     
     def get_queryset(self, request):
         return super().get_queryset(request).annotate(
-            posts_count=Count('post')
+            posts=Count('post')
         )
     
