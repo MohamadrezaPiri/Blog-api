@@ -89,6 +89,16 @@ class UserAdmin(admin.ModelAdmin):
             }))
         return format_html('<a href="{}">{} posts</a>', url, user.posts)
     
+    def comments(self, user):
+        url = (
+            reverse('admin:blog_comment_changelist')
+            + '?'
+            + urlencode({
+                'user__id': str(user.id)
+            }))
+        return format_html('<a href="{}">{}</a>', url, user.comments)
+    
+    
     def get_queryset(self, request):
         return super().get_queryset(request).annotate(
             posts=Count('post')
