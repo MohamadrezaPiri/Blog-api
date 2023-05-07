@@ -58,9 +58,10 @@ class PostAdmin(admin.ModelAdmin):
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
     list_display=['user','post','content','date']
+    list_filter = ['user__username','post']
+    list_per_page=10
     autocomplete_fields=['user','post']
     search_fields=['user','content']
-    list_per_page=10
 
 
 
