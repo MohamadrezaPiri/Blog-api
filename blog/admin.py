@@ -74,11 +74,12 @@ user=get_user_model()
 
 @admin.register(user)
 class UserAdmin(admin.ModelAdmin):
-    search_fields=['username']
-    fields=['username','first_name','last_name','email','password','is_staff','is_active']
     list_display=['username','first_name','last_name','email','is_staff','posts','comments']
     list_editable=['is_staff']
+    list_filter = ['is_staff']
     list_per_page=10
+    fields=['username','first_name','last_name','email','password','is_staff','is_active']
+    search_fields=['username']
 
     def posts(self, user):
         url = (
