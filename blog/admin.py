@@ -5,7 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.db.models.aggregates import Count
 from .models import Post,PostImage,Comment
-from .filters import CommentsCountFilter
+from .filters import CommentsCountFilter, PostsCountFilter
 
 # Register your models here.
 
@@ -76,7 +76,7 @@ user=get_user_model()
 class UserAdmin(admin.ModelAdmin):
     list_display=['username','first_name','last_name','email','is_staff','posts','comments']
     list_editable=['is_staff']
-    list_filter = ['is_staff']
+    list_filter = ['is_staff',PostsCountFilter]
     list_per_page=10
     fields=['username','first_name','last_name','email','password','is_staff','is_active']
     search_fields=['username']
