@@ -76,7 +76,7 @@ user=get_user_model()
 class UserAdmin(admin.ModelAdmin):
     search_fields=['username']
     fields=['username','first_name','last_name','email','password','is_staff','is_active']
-    list_display=['username','first_name','last_name','email','is_staff','posts']
+    list_display=['username','first_name','last_name','email','is_staff','posts','comments']
     list_editable=['is_staff']
     list_per_page=10
 
