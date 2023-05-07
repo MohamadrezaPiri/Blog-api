@@ -59,6 +59,7 @@ class PostAdmin(admin.ModelAdmin):
 class CommentAdmin(admin.ModelAdmin):
     list_display=['user','post','content','date']
     list_filter = ['user__username','post']
+    list_select_related = ['user','post']
     list_per_page=10
     autocomplete_fields=['user','post']
     search_fields=['user','content']
