@@ -121,4 +121,16 @@ class UserAdmin(admin.ModelAdmin):
             f'{total_posts_count} were successfully deleted',
             messages.SUCCESS
         )    
-    
+
+    @admin.action(description='Clear Comments')
+    def clear_comments(self, request, queryset):
+        total_comments_count = sum(user.comment_set.count() for user in queryset)
+
+        for user in queryset:
+            user.comment_set.all().delete()
+
+        self.message_user(
+            request,
+            f'{total_comments_count} were successfully deleted',
+            messages.SUCCESS
+        )    
