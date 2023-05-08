@@ -78,7 +78,7 @@ class UserAdmin(admin.ModelAdmin):
     list_editable=['is_staff']
     list_filter = ['is_staff',PostsCountFilter]
     list_per_page=10
-    fields=['username','first_name','last_name','email','password','is_staff','is_active']
+    fields=['username','first_name','last_name','email','password','is_staff']
     search_fields=['username']
 
     @admin.display(ordering='posts')
