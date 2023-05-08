@@ -81,6 +81,7 @@ class UserAdmin(admin.ModelAdmin):
     fields=['username','first_name','last_name','email','password','is_staff','is_active']
     search_fields=['username']
 
+    @admin.display(ordering='posts')
     def posts(self, user):
         url = (
             reverse('admin:blog_post_changelist')
