@@ -91,6 +91,7 @@ class UserAdmin(admin.ModelAdmin):
             }))
         return format_html('<a href="{}">{} posts</a>', url, user.posts)
     
+    @admin.display(ordering='comments')
     def comments(self, user):
         url = (
             reverse('admin:blog_comment_changelist')
