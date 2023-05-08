@@ -109,7 +109,7 @@ class UserAdmin(admin.ModelAdmin):
             comments=Count('comment')
         )
     
-    @admin.action(description='Clear posts')
+    @admin.action(description='Clear Posts')
     def clear_posts(self, request, queryset):
         total_posts_count = sum(user.post_set.count() for user in queryset)
 
