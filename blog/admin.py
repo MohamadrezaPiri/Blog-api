@@ -78,7 +78,7 @@ class UserAdmin(admin.ModelAdmin):
     list_editable=['is_staff']
     list_filter = ['is_staff',PostsCountFilter]
     list_per_page=10
-    fields=['username','first_name','last_name','email','password','is_staff']
+    fields=['username','first_name','last_name','email','password','is_staff','is_superuser']
     search_fields=['username']
     actions = ['clear_posts','clear_comments']
 
