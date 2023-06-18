@@ -74,7 +74,7 @@ user=get_user_model()
 
 @admin.register(user)
 class UserAdmin(admin.ModelAdmin):
-    list_display=['username','first_name','last_name','email','is_staff','posts','comments']
+    list_display=['username','first_name','last_name','email','is_staff','is_superuser','posts','comments']
     list_editable=['is_staff']
     list_filter = ['is_staff',PostsCountFilter]
     list_per_page=10
